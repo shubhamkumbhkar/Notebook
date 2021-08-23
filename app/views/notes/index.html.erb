@@ -1,0 +1,86 @@
+<h1>NOTEBOOK</h1>
+<% #byebug %>
+<%= current_user.name %>
+
+&emsp;<%= link_to "logout", destroy_user_session_path %>
+&emsp;<%= link_to 'Edit Profile', edit_user_registration_path %> 
+  
+<h2> New Note </h2>
+  
+<%= render partial: "form"%>
+
+<% @notes.order(created_at: :desc).each do |note| %>
+  <h3>Note </h3>
+  <% if note.user.profile.dp.attached? %>
+      <image src= "<%= (url_for(note.user.profile.dp))%>" width="50" height="60">
+  <% end %>
+  Note by <%= note.user.name %> <br><br>
+  <strong> <%= note.name %> </strong>
+  &emsp; <%= note.body %> &emsp;&emsp;&emsp;
+  <%= time_ago_in_words(note.created_at) %> Ago
+  <br><br>
+  <% #byebug %>
+
+  <% if can? :update, note %>
+    &emsp;<%= link_to "Edit", edit_note_path(note) %>
+  <% end %>
+
+  <% if can? :destroy, note %>
+    <%= link_to "Delete", note_path(note),
+      method: :delete,
+      data: { confirm: "Are you sure?" } %>
+  <% end %>
+  <br>    
+
+  <%= render partial: "comments/form", locals: {note: note} %>
+
+  <% note.comments.order(created_at: :desc).each do |comment| %>
+  <% #byebug %>
+    <% if comment.user.profile.dp.attached? %>
+      <image src= "<%= (url_for(comment.user.profile.dp))%>" width="50" height="60">
+    <% end %>
+    Comment by <%= comment.user.name %><br><br>
+    <strong>  &emsp; comment-&emsp; <%= comment.name %> </strong>
+    &emsp;&emsp; <%= comment.body %>&emsp;&emsp;&emsp;
+    <%= time_ago_in_words(comment.created_at) %> Ago
+    <br><br>
+    <% #byebug %>
+
+    <% if can? :update, comment %>
+      &emsp; &emsp;<%= link_to "Edit", edit_note_comment_path(note,comment) %>
+    <% end %>
+
+    <% if can? :destroy, comment %>
+      <%= link_to 'Delete', [comment.note, comment],
+        method: :delete,
+        data: { confirm: "Are you sure?" } %>
+    <% end %>
+    <%= render partial: "replies/form", locals: {comment: comment} %>
+
+    <% comment.replies.order(created_at: :desc).each do |reply| %>
+      <% if reply.user.profile.dp.attached? %>
+        <image src= "<%= (url_for(reply.user.profile.dp))%>" width="50" height="60">
+      <% end %>
+      Reply by <%= reply.user.name%> <br><br>
+      <strong> &emsp;&emsp; reply-&emsp; <%= reply.name %> </strong>
+      &emsp;&emsp;&emsp; <%= reply.body %>&emsp;&emsp;&emsp;
+      <%= time_ago_in_words(reply.created_at) %> Ago
+      <br><br>
+      <% #byebug%>
+      
+      <% if can? :update, reply %>
+        &emsp; &emsp; &emsp; <%= link_to "Edit", edit_note_comment_reply_path(note, comment, reply) %>
+      <% end %>
+
+      <% if can? :destroy, reply %>
+        <%= link_to 'Delete', [comment.note,reply.comment, reply],
+          method: :delete,
+          data: { confirm: "Are you sure?" } %>
+      <% end %>                   
+      <br> <br>
+    <% end %>
+  <% end %>
+  <hr>
+<% end %>
+
+

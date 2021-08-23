@@ -1,0 +1,13 @@
+<h1>Welcome</h1>
+<strong> Enter your details </strong>
+
+<%= form_with model: @profile do |form| %>
+    <%= form.label :'Profile Picture' %>
+    <%= form.file_field  :dp %><br><br>
+    <%= form.label :'Date of birth' %>
+    <%= form.date_field  :dob %><br><br>
+    <%= form.label :Address %> 
+    <%= form.text_area :address %>
+    <%= form.submit %>
+    <% end %>
+<%= link_to "logout", destroy_user_session_path %>

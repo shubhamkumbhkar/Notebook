@@ -1,0 +1,9 @@
+<%= form_for [ comment.note, comment, comment.replies.build ] do |form| %>
+  <p>
+    <%= form.hidden_field :user_id, value: current_user.id %>
+
+    &emsp;&emsp; <%= form.text_field :name , placeholder:"name"%>
+    <%= form.text_field :body, placeholder:"reply" %>
+    <%= form.submit %>
+  </p>
+<% end %>

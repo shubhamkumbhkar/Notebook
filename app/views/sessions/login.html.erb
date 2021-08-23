@@ -1,0 +1,23 @@
+<h1>Log-in</h1>
+<% flash.each do |name, msg| %>
+
+  <% if msg.class == Array %>
+    <% msg.each do |message| %>
+      <%= content_tag :div, message, :id => "flash_#{name}" %>
+    <% end %>
+  <% else %>
+
+    <%= content_tag :div, msg, :id => "flash_#{name}" %>
+  <% end %>
+<% end %>
+
+<%= form_with(scope: :session, url: login_path) do |f| %>
+  <%= f.label :email %><br/>
+  <%= f.email_field :username %><br/>
+ 
+  <%= f.label :password %><br/>
+  <%= f.password_field :password %><br/>
+ 
+  <%= f.submit "Log in" %>
+
+<% end %>
