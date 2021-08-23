@@ -1,7 +1,6 @@
 <% #byebug%>
 <%= form_with model: [ note, note.comments.build ] do |form| %>
   <p>
-    <%= form.hidden_field :user_id, value: current_user.id %>
     <%= form.text_field :name , placeholder:"name"%>
     <%= form.text_field :body, placeholder:"comment" %>
     <%= form.submit %>

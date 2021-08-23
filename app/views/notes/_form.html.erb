@@ -1,9 +1,5 @@
 <%= form_for @note do |form| %>
-  <div>
-  <% #byebug%>
-  <%= form.hidden_field :user_id, value: current_user.id %>
-
-  </div>
+ 
   <div>
     <%= form.label :name %><br>
     <%= form.text_field :name %>

@@ -4,8 +4,14 @@ class RepliesController < ApplicationController
   end
   def create
     @comment = Comment.find(params[:comment_id])
-    @reply = @comment.replies.create(reply_params)
-    redirect_to notes_path
+    @reply = @comment.replies.new(reply_params)
+    @reply.user_id = current_user.id
+    if @comment.save
+     redirect_to notes_path
+    else
+      flash[:notice] = "something went wrong please try again"
+      redirect_to notes_path
+    end
   end
   def edit
     #@note = Note.find(params[:note_id])
@@ -26,7 +32,7 @@ class RepliesController < ApplicationController
   end
   private
     def reply_params
-      params.require(:reply).permit(:name, :body, :user_id)
+      params.require(:reply).permit(:name, :body)
     end
 end
 

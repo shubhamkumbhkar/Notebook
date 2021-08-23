@@ -13,13 +13,14 @@ class NotesController < ApplicationController
   end
 
   def create
-  # byebug
+   #byebug
     @note = Note.new(note_params)
-    
+    @note.user_id = current_user.id
     if @note.save
       @notes =  Note.includes(:comments)
       redirect_to notes_path
     else
+      flash[:notice] = "something went wrong please try again"
       redirect_to notes_path
     end
   end
@@ -51,6 +52,6 @@ class NotesController < ApplicationController
   
   private
     def note_params
-      params.require(:note).permit(:name, :body, :user_id)
+      params.require(:note).permit(:name, :body)
     end
 end

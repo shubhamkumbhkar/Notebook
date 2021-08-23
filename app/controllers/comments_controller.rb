@@ -4,8 +4,14 @@ def new
 end
 def create
   @note = Note.find(params[:note_id])
-  @comment = @note.comments.create(comment_params)
-  redirect_to notes_path
+  @comment = @note.comments.new(comment_params)
+  @comment.user_id = current_user.id
+  if @comment.save
+   redirect_to notes_path
+  else
+    flash[:notice] = "something went wrong please try again"
+    redirect_to notes_path
+  end
 end
 def edit
   @note = Note.find(params[:note_id])
@@ -30,7 +36,7 @@ end
     
 private
   def comment_params
-    params.require(:comment).permit(:name, :body, :user_id)
+    params.require(:comment).permit(:name, :body)
   end
 end
 
